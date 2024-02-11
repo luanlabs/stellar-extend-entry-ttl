@@ -1,4 +1,4 @@
-import { checkIfEnvsAreSet } from 'env-exist';
+import { checkIfEnvsAreSet } from 'inforce-env';
 
 const checkEnvs = () => {
   const envs = [
@@ -9,7 +9,7 @@ const checkEnvs = () => {
     'NODE_ENV',
     'LOG_FILE_PATH',
   ];
-  if (!checkIfEnvsAreSet(envs, process)) {
+  if (!checkIfEnvsAreSet(envs)) {
     process.exit(1);
   }
 };
