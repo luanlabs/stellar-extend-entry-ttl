@@ -7,7 +7,7 @@ import { MONTH_IN_LEDGERS } from '../../../constants/ledger';
 const buildExtendTransaction = async (keys: xdr.LedgerKey[]): Promise<string> => {
   const { server, admin, adminSecretKey } = await getConfig();
 
-  const call = Operation.extendFootprintTtl({ extendTo: MONTH_IN_LEDGERS * 6 });
+  const call = Operation.extendFootprintTtl({ extendTo: MONTH_IN_LEDGERS * 5 });
 
   const transaction = await baseTransaction(admin, call, keys);
 

@@ -7,7 +7,8 @@ const finalizeTransaction = async (hash: string, server: SorobanRpc.Server) => {
     const tx = await server.getTransaction(hash);
 
     if (tx.status === 'FAILED') {
-      return log.error({ message: 'Transaction feild' });
+      log.error({ message: 'Transaction feild' });
+      return false;
     }
     if (tx.status !== 'NOT_FOUND') {
       return tx;
