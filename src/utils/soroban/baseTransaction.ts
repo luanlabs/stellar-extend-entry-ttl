@@ -7,14 +7,14 @@ import {
   SorobanDataBuilder,
 } from 'stellar-sdk';
 
-import getFee from './getFee';
+import getConfig from './getConfig';
 
 const baseTransaction = async (
   admin: Account,
   call: xdr.Operation<Operation.InvokeHostFunction> | xdr.Operation<Operation.ExtendFootprintTTL>,
   keys?: xdr.LedgerKey[],
 ) => {
-  const fee = getFee();
+  const { fee } = await getConfig();
 
   let transaction = await new TransactionBuilder(admin, {
     fee,

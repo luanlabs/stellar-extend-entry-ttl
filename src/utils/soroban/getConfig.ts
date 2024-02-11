@@ -1,23 +1,19 @@
-import { Contract, SorobanRpc } from 'stellar-sdk';
+import { Contract, Keypair, SorobanRpc } from 'stellar-sdk';
 
-import getAdmin from './getAdmin';
-import { Network } from '../../types/networkType';
+import getFee from './getFee';
 
-const getConfig = async (network: Network) => {
-  let contract = new Contract(String(process.env.MAINNET_CONTRACT_ID));
-  let server = new SorobanRpc.Server(String(process.env.MAINNET_FUTURENET_RPC_URL));
-  let admin = await server.getAccount(getAdmin().publicKey());
-
-  if (network === 'testnet') {
-    contract = new Contract(String(process.env.TESTNET_CONTRACT_ID));
-    server = new SorobanRpc.Server(String(process.env.TESTNET_FUTURENET_RPC_URL));
-    admin = await server.getAccount(getAdmin().publicKey());
-  }
+const getConfig = async () => {
+  const contract = new Contract(String(process.env.CONTRACT_ID));
+  const server = new SorobanRpc.Server(String(process.env.FUTURENET_RPC_URL));
+  const adminSecretKey = Keypair.fromSecret(String(process.env.ADMIN_SECRET_KEY));
+  const admin = await server.getAccount(adminSecretKey.publicKey());
 
   return {
     contract,
     server,
     admin,
+    adminSecretKey,
+    fee: getFee(),
   };
 };
 export default getConfig;

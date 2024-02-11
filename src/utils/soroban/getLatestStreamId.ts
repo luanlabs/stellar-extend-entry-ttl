@@ -1,12 +1,10 @@
-import { scValToNative } from 'stellar-sdk';
+import { scValToBigInt } from 'stellar-sdk';
+
 import getConfig from './getConfig';
 import baseTransaction from './baseTransaction';
-import { Network } from '../../types/networkType';
-import getAdmin from './getAdmin';
 
-export const getLatestStreamId = async (network: Network): Promise<string> => {
-  const { server, contract } = await getConfig(network);
-  const admin = await server.getAccount(getAdmin().publicKey());
+export const getLatestStreamId = async (): Promise<bigint> => {
+  const { server, contract, admin } = await getConfig();
 
   const call = contract.call('get_latest_stream_id');
 
@@ -14,7 +12,7 @@ export const getLatestStreamId = async (network: Network): Promise<string> => {
 
   const transactionSimulate = await server.simulateTransaction(transactionResult);
 
-  const retval: string = scValToNative(Object(transactionSimulate).result.retval);
+  const retval = scValToBigInt(Object(transactionSimulate).result.retval);
 
   return retval;
 };

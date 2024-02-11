@@ -5,10 +5,7 @@ const { scvVec, scvLedgerKeyContractInstance } = xdr.ScVal;
 
 const server = new SorobanRpc.Server('https://rpc-futurenet.stellar.org');
 
-export const dayLedger = 17280;
-export const monthLedger = dayLedger * 30;
-
-export class MyContract {
+export class SorobanContract {
   public contract: string;
 
   constructor(contract: string) {

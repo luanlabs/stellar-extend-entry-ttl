@@ -1,30 +1,35 @@
-import { Address, xdr } from 'stellar-sdk';
+import { xdr } from 'stellar-sdk';
 
-import { MyContract, dayLedger } from './myContract';
+import { SorobanContract } from './SorobanContrcat';
+import { DAY_IN_LEDGERS } from '../../constants/ledger';
+import BN from '../BN';
 
-const { scvSymbol } = xdr.ScVal;
+const { ScVal } = xdr;
+const { scvSymbol } = ScVal;
 
 const checkInstanceContract = async (
   contract: string,
   dataKey: string,
   lastLedger: number,
-  data?: string,
+  data?: xdr.ScVal,
 ) => {
-  const selectContract = new MyContract(contract);
+  const selectContract = new SorobanContract(contract);
 
-  const listKey: xdr.ScVal[] = [scvSymbol(dataKey)];
+  const listKey = [scvSymbol(dataKey)];
 
   if (data) {
-    listKey.push(Address.fromString(data).toScVal());
+    listKey.push(data);
   }
 
   const { liveLedger, key } = await selectContract.getDataKeyTTL(listKey);
 
-  if (Number(liveLedger) - Number(lastLedger) <= dayLedger - 1000) {
-    return key;
+  if (liveLedger) {
+    if (new BN(liveLedger).minus(lastLedger) <= new BN(DAY_IN_LEDGERS + 1000)) {
+      return key;
+    }
   }
 
-  return undefined;
+  return null;
 };
 
 export default checkInstanceContract;

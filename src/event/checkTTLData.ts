@@ -1,57 +1,56 @@
-import { dayLedger } from '../utils/contract/myContract';
+import { Address, xdr } from 'stellar-sdk';
+
 import getConfig from '../utils/soroban/getConfig';
 import getLatestStreamId from '../utils/soroban/getLatestStreamId';
-import getLinerStreamId from '../utils/contract/getLinerStreamId';
-import finalizeTransaction from '../utils/soroban/finalizeTransaction';
 import checkInstanceContract from '../utils/contract/checkInstanceContract';
-import buildExtendTransaction from '../utils/soroban/contract/extendTransaction';
 import checkContractTTL from '../utils/contract/checkContractTTL';
-import getToken from '../utils/soroban/getTokens';
-import getAdmin from '../utils/soroban/getAdmin';
-import { Network } from '../types/networkType';
+import getTokens from '../utils/soroban/getTokens';
 import log from '../logger';
+import { DAY_IN_SECONDS } from '../constants/seconds';
+import handleExtendDataEntires from '../utils/soroban/contract/handleExtendDataEntries';
 
-const checkTTLData = async (network: Network) => {
+const { Uint64, ScVal } = xdr;
+const { scvU64 } = ScVal;
+
+const checkTTLData = async () => {
   try {
-    const { server, contract } = await getConfig(network);
-    const admin = await server.getAccount(getAdmin().publicKey());
+    const { server, contract, admin } = await getConfig();
     const lastLedger = (await server.getLatestLedger()).sequence;
 
-    const lastId = await getLatestStreamId(network);
-    let useId = 0;
+    const latestStreamId = await getLatestStreamId();
 
     const promiseStreams = [];
 
-    while (useId < Number(lastId)) {
-      const ledgerKey = getLinerStreamId(network, String(useId), lastLedger);
+    for (let i = 0; i < latestStreamId; i++) {
+      const ledgerKey = checkInstanceContract(
+        contract.address().toString(),
+        'LinearStream',
+        lastLedger,
+        scvU64(Uint64.fromString(i.toString())),
+      );
       promiseStreams.push(ledgerKey);
-      useId += 1;
     }
 
-    const filteredStreams = (await Promise.all(promiseStreams)).filter(
-      ({ liveLedger, lastLedger }) => {
-        return Number(liveLedger) - Number(lastLedger) <= dayLedger - 1000;
-      },
-    );
+    const streams = await Promise.all(promiseStreams);
+    const filteredStreams = streams.filter((key): key is xdr.LedgerKey => key !== null);
 
-    const keys = filteredStreams.map(({ key }) => key);
-
-    const tokens = await getToken();
+    const keys = filteredStreams;
+    const tokens = await getTokens();
 
     for (let i = 0; i < tokens.length; i++) {
-      const ContractKey = await checkContractTTL(tokens[i].address, lastLedger);
-      if (ContractKey) {
-        keys.push(ContractKey);
+      const tokenContractKey = await checkContractTTL(tokens[i].address, lastLedger);
+      if (tokenContractKey) {
+        keys.push(tokenContractKey);
       }
 
-      const balanceKey = await checkInstanceContract(
+      const tokenBalanceKey = await checkInstanceContract(
         tokens[i].address,
         'Balance',
         lastLedger,
-        getAdmin().publicKey(),
+        Address.fromString(admin.accountId()).toScVal(),
       );
-      if (balanceKey) {
-        keys.push(balanceKey);
+      if (tokenBalanceKey) {
+        keys.push(tokenBalanceKey);
       }
     }
 
@@ -69,12 +68,12 @@ const checkTTLData = async (network: Network) => {
       keys.push(latestStreamIdKey);
     }
 
-    if (keys.length > 0) {
-      const extendTx = await buildExtendTransaction(admin, keys, network);
-      await finalizeTransaction(extendTx, server);
+    if (keys.length) {
+      handleExtendDataEntires(keys);
     }
 
-    setTimeout(checkTTLData, 84600000, 'testnet');
+    await new Promise((resolve) => setTimeout(resolve, DAY_IN_SECONDS));
+    checkTTLData();
   } catch (e) {
     log.fatal({ message: e.message });
   }

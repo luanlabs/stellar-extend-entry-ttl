@@ -29,7 +29,7 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 export const log = bunyan.createLogger({
-  name: 'fluxity-app',
+  name: 'stellar-extend-entry-ttl',
   src: true,
   level,
   streams,

@@ -1,8 +1,8 @@
 import log from '../logger';
 
 const request = async (url: string, config?: RequestInit) => {
-  let status = true;
-  while (status) {
+  let isRequestPending = true;
+  while (isRequestPending) {
     try {
       const response = await fetch(url, config);
       const data = await response.json();
@@ -12,7 +12,7 @@ const request = async (url: string, config?: RequestInit) => {
         throw { data, response };
       }
 
-      status = false;
+      isRequestPending = false;
       return data;
     } catch (error) {
       log.error({ message: error.message });
