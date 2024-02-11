@@ -9,9 +9,7 @@ const checkEnvs = () => {
     'NODE_ENV',
     'LOG_FILE_PATH',
   ];
-  if (!checkIfEnvsAreSet(envs)) {
-    process.exit(1);
-  }
+  checkIfEnvsAreSet(envs, true);
 };
 
 export default checkEnvs;
