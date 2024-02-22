@@ -24,7 +24,6 @@ const checkInstanceContract = async (
 
   const { liveLedger, key } = await selectContract.getDataKeyTTL(listKey);
   const message = liveLedger + ' --- ' + lastLedger + ' -> ' + dataKey + '(' + data?.value() + ')';
-  console.log(message);
 
   if (liveLedger) {
     if (liveLedger < lastLedger) {

@@ -9,7 +9,6 @@ const checkContractTTL = async (contract: string, lastLedger: number) => {
   const { liveLedger, key } = await selectContract.getContractTTL();
 
   const message = liveLedger + ' --- ' + lastLedger + ' -> ' + contract;
-  console.log(message);
 
   if (liveLedger) {
     if (liveLedger < lastLedger) {
