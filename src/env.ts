@@ -1,4 +1,4 @@
-import { checkIfEnvsAreSet } from 'inforce-env';
+import envEnforcer from 'enforcer-env';
 
 const checkEnvs = () => {
   const envs = [
@@ -9,7 +9,7 @@ const checkEnvs = () => {
     'NODE_ENV',
     'LOG_FILE_PATH',
   ];
-  checkIfEnvsAreSet(envs, true);
+  envEnforcer(envs);
 };
 
 export default checkEnvs;

@@ -2,14 +2,13 @@ import { Operation, xdr } from 'stellar-sdk';
 
 import getConfig from '../getConfig';
 import baseTransaction from '../baseTransaction';
-import { MONTH_IN_LEDGERS } from '../../../constants/ledger';
 
-const buildExtendTransaction = async (keys: xdr.LedgerKey[]): Promise<string> => {
+const buildRestoreTransaction = async (keys: xdr.LedgerKey[]): Promise<string> => {
   const { server, admin, adminSecretKey } = await getConfig();
 
-  const call = Operation.extendFootprintTtl({ extendTo: MONTH_IN_LEDGERS * 5 });
+  const call = Operation.restoreFootprint({});
 
-  const transaction = await baseTransaction(admin, call, keys, 'extend');
+  const transaction = await baseTransaction(admin, call, keys, 'restore');
 
   const transactionPrepare = await server.prepareTransaction(transaction);
 
@@ -19,4 +18,4 @@ const buildExtendTransaction = async (keys: xdr.LedgerKey[]): Promise<string> =>
   return response.hash;
 };
 
-export default buildExtendTransaction;
+export default buildRestoreTransaction;

@@ -1,21 +1,21 @@
 import { xdr } from 'stellar-sdk';
 
-import buildExtendTransaction from './extendTransaction';
+import buildRestoreTransaction from './restoreTransaction';
 import finalizeTransaction from '../finalizeTransaction';
 import getConfig from '../getConfig';
 import log from '../../../logger';
 
-const handleExtendDataEntires = async (keys: xdr.LedgerKey[]) => {
+const handleRestoreDataEntires = async (keys: xdr.LedgerKey[]) => {
   try {
     const { server } = await getConfig();
 
     for (let i = 0; i < Math.ceil(keys.length / 30); i++) {
       const keysSplit = keys.slice(i * 30, (i + 1) * 30);
-      const txExtend = await buildExtendTransaction(keysSplit);
-      const finalize = await finalizeTransaction(txExtend, server);
+      const txRestore = await buildRestoreTransaction(keysSplit);
+      const finalize = await finalizeTransaction(txRestore, server);
       if (finalize) {
         for (let j = 0; j < keysSplit.length; j++) {
-          log.warn({ message: 'extended datakey : ' + keysSplit[j] });
+          log.warn({ message: 'Restored datakey : ' + keysSplit[j] });
         }
       } else {
         log.error({ message: 'Transaction failed' });
@@ -26,4 +26,4 @@ const handleExtendDataEntires = async (keys: xdr.LedgerKey[]) => {
   }
 };
 
-export default handleExtendDataEntires;
+export default handleRestoreDataEntires;

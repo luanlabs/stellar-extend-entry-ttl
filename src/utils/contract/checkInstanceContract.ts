@@ -3,6 +3,7 @@ import { xdr } from 'stellar-sdk';
 import { SorobanContract } from './SorobanContrcat';
 import { DAY_IN_LEDGERS } from '../../constants/ledger';
 import BN from '../BN';
+import log from '../../logger';
 
 const { ScVal } = xdr;
 const { scvSymbol } = ScVal;
@@ -22,10 +23,20 @@ const checkInstanceContract = async (
   }
 
   const { liveLedger, key } = await selectContract.getDataKeyTTL(listKey);
+  const message = liveLedger + ' --- ' + lastLedger + ' -> ' + dataKey + '(' + data?.value() + ')';
+  console.log(message);
 
   if (liveLedger) {
-    if (new BN(liveLedger).minus(lastLedger) <= new BN(DAY_IN_LEDGERS + 1000)) {
-      return key;
+    if (liveLedger < lastLedger) {
+      return { key, type: 'restore' };
+    }
+
+    if (
+      new BN(liveLedger).minus(lastLedger).toNumber() <= DAY_IN_LEDGERS * 5 &&
+      liveLedger > lastLedger
+    ) {
+      log.warn({ message });
+      return { key, type: 'extend' };
     }
   }
 

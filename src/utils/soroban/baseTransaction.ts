@@ -11,8 +11,12 @@ import getConfig from './getConfig';
 
 const baseTransaction = async (
   admin: Account,
-  call: xdr.Operation<Operation.InvokeHostFunction> | xdr.Operation<Operation.ExtendFootprintTTL>,
+  call:
+    | xdr.Operation<Operation.InvokeHostFunction>
+    | xdr.Operation<Operation.ExtendFootprintTTL>
+    | xdr.Operation<Operation.RestoreFootprint>,
   keys?: xdr.LedgerKey[],
+  type?: 'extend' | 'restore',
 ) => {
   const { fee } = await getConfig();
 
@@ -22,7 +26,11 @@ const baseTransaction = async (
   });
 
   if (keys) {
-    transaction = transaction.setSorobanData(new SorobanDataBuilder().setFootprint(keys).build());
+    if (type === 'extend') {
+      transaction = transaction.setSorobanData(new SorobanDataBuilder().setFootprint(keys).build());
+    } else {
+      transaction = transaction.setSorobanData(new SorobanDataBuilder().setReadWrite(keys).build());
+    }
   }
 
   transaction = transaction.addOperation(call);
