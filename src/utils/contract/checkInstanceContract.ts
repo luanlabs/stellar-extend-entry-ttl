@@ -27,6 +27,7 @@ const checkInstanceContract = async (
 
   if (liveLedger) {
     if (liveLedger < lastLedger) {
+      log.info({ message });
       return { key, type: 'restore' };
     }
 
@@ -34,7 +35,7 @@ const checkInstanceContract = async (
       new BN(liveLedger).minus(lastLedger).toNumber() <= DAY_IN_LEDGERS * 5 &&
       liveLedger > lastLedger
     ) {
-      log.warn({ message });
+      log.info({ message });
       return { key, type: 'extend' };
     }
   }

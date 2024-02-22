@@ -1,9 +1,9 @@
 import { Address } from 'stellar-sdk';
 
 import getTokens from '../soroban/getTokens';
+import getConfig from '../soroban/getConfig';
 import checkContractTTL from './checkContractTTL';
 import checkInstanceContract from './checkInstanceContract';
-import getConfig from '../soroban/getConfig';
 
 const getTokenKeysToExtend = async (lastLedger: number) => {
   const { admin } = await getConfig();

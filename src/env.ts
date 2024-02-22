@@ -1,4 +1,4 @@
-import envEnforcer from 'enforcer-env';
+import envil from 'envil';
 
 const checkEnvs = () => {
   const envs = [
@@ -9,7 +9,8 @@ const checkEnvs = () => {
     'NODE_ENV',
     'LOG_FILE_PATH',
   ];
-  envEnforcer(envs);
+
+  envil(envs);
 };
 
 export default checkEnvs;

@@ -1,16 +1,16 @@
 import { xdr } from 'stellar-sdk';
 
-import buildExtendTransaction from './extendTransaction';
-import finalizeTransaction from '../finalizeTransaction';
-import getConfig from '../getConfig';
 import log from '../../../logger';
+import getConfig from '../getConfig';
+import finalizeTransaction from '../finalizeTransaction';
+import buildExtendTransaction from './extendTransaction';
 
 const handleExtendDataEntires = async (keys: xdr.LedgerKey[]) => {
   try {
     const { server } = await getConfig();
 
-    for (let i = 0; i < Math.ceil(keys.length / 30); i++) {
-      const keysSplit = keys.slice(i * 30, (i + 1) * 30);
+    for (let i = 0; i < Math.ceil(keys.length / 40); i++) {
+      const keysSplit = keys.slice(i * 40, (i + 1) * 40);
       const txExtend = await buildExtendTransaction(keysSplit);
       const finalize = await finalizeTransaction(txExtend, server);
       if (finalize) {

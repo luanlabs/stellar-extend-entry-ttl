@@ -9,8 +9,8 @@ const handleRestoreDataEntires = async (keys: xdr.LedgerKey[]) => {
   try {
     const { server } = await getConfig();
 
-    for (let i = 0; i < Math.ceil(keys.length / 30); i++) {
-      const keysSplit = keys.slice(i * 30, (i + 1) * 30);
+    for (let i = 0; i < Math.ceil(keys.length / 20); i++) {
+      const keysSplit = keys.slice(i * 20, (i + 1) * 20);
       const txRestore = await buildRestoreTransaction(keysSplit);
       const finalize = await finalizeTransaction(txRestore, server);
       if (finalize) {

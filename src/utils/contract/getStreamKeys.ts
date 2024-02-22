@@ -1,8 +1,8 @@
 import { xdr } from 'stellar-sdk';
 
+import { KeyType } from '../../constants/keyType';
 import getConfig from '../soroban/getConfig';
 import checkInstanceContract from './checkInstanceContract';
-import { KeyType } from '../../constants/keyType';
 
 const { Uint64, ScVal } = xdr;
 const { scvU64 } = ScVal;
