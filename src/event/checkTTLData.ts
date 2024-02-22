@@ -48,13 +48,11 @@ const checkTTLData = async () => {
     }
 
     if (keysToRestore.length) {
-      console.log('start restore');
-      handleRestoreDataEntires(keysToRestore);
+      await handleRestoreDataEntires(keysToRestore);
     }
 
     if (keysToExtend.length) {
-      console.log('strart extend');
-      handleExtendDataEntires(keysToExtend);
+      await handleExtendDataEntires(keysToExtend);
     }
 
     await new Promise((resolve) => setTimeout(resolve, DAY_IN_SECONDS));
