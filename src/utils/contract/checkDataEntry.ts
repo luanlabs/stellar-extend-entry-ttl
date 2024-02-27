@@ -1,14 +1,12 @@
 import { xdr } from 'stellar-sdk';
 
 import { SorobanContract } from './SorobanContrcat';
-import { DAY_IN_LEDGERS } from '../../constants/ledger';
-import BN from '../BN';
-import log from '../../logger';
+import checkLedgerTTL from './checkLedgerTTL';
 
 const { ScVal } = xdr;
 const { scvSymbol } = ScVal;
 
-const checkInstanceContract = async (
+const checkDataEntry = async (
   contract: string,
   dataKey: string,
   lastLedger: number,
@@ -25,22 +23,7 @@ const checkInstanceContract = async (
   const { liveLedger, key } = await selectContract.getDataKeyTTL(listKey);
   const message = liveLedger + ' --- ' + lastLedger + ' -> ' + dataKey + '(' + data?.value() + ')';
 
-  if (liveLedger) {
-    if (liveLedger < lastLedger) {
-      log.info({ message });
-      return { key, type: 'restore' };
-    }
-
-    if (
-      new BN(liveLedger).minus(lastLedger).toNumber() <= DAY_IN_LEDGERS * 5 &&
-      liveLedger > lastLedger
-    ) {
-      log.info({ message });
-      return { key, type: 'extend' };
-    }
-  }
-
-  return null;
+  return checkLedgerTTL(Number(liveLedger), lastLedger, message, key);
 };
 
-export default checkInstanceContract;
+export default checkDataEntry;

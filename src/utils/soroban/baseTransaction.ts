@@ -8,6 +8,7 @@ import {
 } from 'stellar-sdk';
 
 import getConfig from './getConfig';
+import { TTransaction, Transactions } from '../../types/Transactions';
 
 const baseTransaction = async (
   admin: Account,
@@ -16,7 +17,7 @@ const baseTransaction = async (
     | xdr.Operation<Operation.ExtendFootprintTTL>
     | xdr.Operation<Operation.RestoreFootprint>,
   keys?: xdr.LedgerKey[],
-  type?: 'extend' | 'restore',
+  type?: TTransaction,
 ) => {
   const { fee } = await getConfig();
 
@@ -26,7 +27,7 @@ const baseTransaction = async (
   });
 
   if (keys) {
-    if (type === 'extend') {
+    if (type === Transactions.Extend) {
       transaction = transaction.setSorobanData(new SorobanDataBuilder().setFootprint(keys).build());
     } else {
       transaction = transaction.setSorobanData(new SorobanDataBuilder().setReadWrite(keys).build());

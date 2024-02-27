@@ -6,7 +6,7 @@ const getTokens = async () => {
     headers: { 'Content-Type': 'application/json' },
   };
 
-  const tokens = await request('https://api.fluxity.finance/testnet/token', config);
+  const tokens = await request(String(process.env.API_URL), config);
   const tokenClaimable = tokens.result.filter((token: { claimable: boolean }) => token.claimable);
 
   return tokenClaimable;

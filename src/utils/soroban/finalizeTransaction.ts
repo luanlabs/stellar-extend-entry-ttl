@@ -3,7 +3,7 @@ import { SorobanRpc } from 'stellar-sdk';
 import log from '../../logger';
 
 const finalizeTransaction = async (hash: string, server: SorobanRpc.Server) => {
-  for (let index = 0; index < 10; index++) {
+  for (let index = 0; index < 20; index++) {
     const tx = await server.getTransaction(hash);
 
     if (tx.status === 'FAILED') {

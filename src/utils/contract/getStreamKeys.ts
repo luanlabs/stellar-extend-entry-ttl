@@ -1,8 +1,8 @@
 import { xdr } from 'stellar-sdk';
 
-import { KeyType } from '../../constants/keyType';
+import { KeyType } from '../../types/keyType';
 import getConfig from '../soroban/getConfig';
-import checkInstanceContract from './checkInstanceContract';
+import checkDataEntry from './checkDataEntry';
 
 const { Uint64, ScVal } = xdr;
 const { scvU64 } = ScVal;
@@ -13,7 +13,7 @@ const getStreamKeys = async (lastId: bigint, lastLedger: number) => {
   const promiseStreams = [];
 
   for (let i = 0; i < lastId; i++) {
-    const ledgerKey = checkInstanceContract(
+    const ledgerKey = checkDataEntry(
       contract.address().toString(),
       'LinearStream',
       lastLedger,
