@@ -8,6 +8,7 @@ const checkEnvs = () => {
     'CONTRACT_ID',
     'NODE_ENV',
     'LOG_FILE_PATH',
+    'API_URL',
   ];
 
   envEnforcer(envs);
