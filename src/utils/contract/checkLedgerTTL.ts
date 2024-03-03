@@ -11,7 +11,7 @@ const checkLedgerTTL = (
   key: xdr.LedgerKey,
 ) => {
   if (liveLedger) {
-    if (liveLedger > lastLedger) {
+    if (liveLedger < lastLedger) {
       log.info({ message });
       return { key, type: 'restore' };
     }
