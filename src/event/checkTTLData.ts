@@ -3,7 +3,6 @@ import getConfig from '../utils/soroban/getConfig';
 import checkContractTTL from '../utils/contract/checkContractTTL';
 import getLatestStreamId from '../utils/soroban/getLatestStreamId';
 import getTokenKeysToExtend from '../utils/contract/getTokenKeys';
-import checkDataEntry from '../utils/contract/checkDataEntry';
 import getStreamKeysToExtend from '../utils/contract/getStreamKeys';
 import handleExtendDataEntires from '../utils/soroban/contract/handleExtendDataEntries';
 import handleRestoreDataEntires from '../utils/soroban/contract/handleRestoreDataEntries';
@@ -31,19 +30,6 @@ const checkTTLData = async () => {
         keysToExtend.push(fluxityContractKey.key);
       } else {
         keysToRestore.push(fluxityContractKey.key);
-      }
-    }
-
-    const latestStreamIdKey = await checkDataEntry(
-      contract.address().toString(),
-      'LatestStreamId',
-      lastLedger,
-    );
-    if (latestStreamIdKey) {
-      if (latestStreamIdKey.type === 'extend') {
-        keysToExtend.push(latestStreamIdKey.key);
-      } else {
-        keysToRestore.push(latestStreamIdKey.key);
       }
     }
 
