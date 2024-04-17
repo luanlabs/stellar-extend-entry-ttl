@@ -15,7 +15,7 @@ const getStreamKeys = async (lastId: bigint, lastLedger: number) => {
   for (let i = 0; i < lastId; i++) {
     const ledgerKey = checkDataEntry(
       contract.address().toString(),
-      'Stream',
+      'Lockup',
       lastLedger,
       scvU64(Uint64.fromString(i.toString())),
     );

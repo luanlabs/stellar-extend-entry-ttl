@@ -6,7 +6,7 @@ import baseTransaction from './baseTransaction';
 export const getLatestStreamId = async (): Promise<bigint> => {
   const { server, contract, admin } = await getConfig();
 
-  const call = contract.call('get_latest_stream_id');
+  const call = contract.call('get_latest_lockup_id');
 
   const transactionResult = await baseTransaction(admin, call);
 
