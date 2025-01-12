@@ -1,11 +1,14 @@
-import { Contract, Keypair, SorobanRpc } from 'stellar-sdk';
+import { Contract, Keypair, rpc } from '@stellar/stellar-sdk';
+import envs from '../../envs';
 
 const getConfig = async () => {
-  const contract = new Contract(String(process.env.CONTRACT_ID));
-  const server = new SorobanRpc.Server(String(process.env.FUTURENET_RPC_URL));
-  const adminSecretKey = Keypair.fromSecret(String(process.env.ADMIN_SECRET_KEY));
+  const { CONTRACT_ID, RPC_URL, ADMIN_SECRET_KEY, BASE_FEE } = envs();
+
+  const contract = new Contract(CONTRACT_ID);
+  const server = new rpc.Server(RPC_URL);
+  const adminSecretKey = Keypair.fromSecret(ADMIN_SECRET_KEY);
   const admin = await server.getAccount(adminSecretKey.publicKey());
-  const fee = String(process.env.BASE_FEE) || '1000000000';
+  const fee = BASE_FEE || '1000000000';
 
   return {
     contract,

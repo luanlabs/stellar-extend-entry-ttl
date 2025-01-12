@@ -1,9 +1,7 @@
-import { Durability } from 'stellar-sdk/lib/soroban';
-import { SorobanRpc, xdr } from 'stellar-sdk';
+import { xdr, rpc } from '@stellar/stellar-sdk';
+import getConfig from '../soroban/getConfig';
 
 const { scvVec, scvLedgerKeyContractInstance } = xdr.ScVal;
-
-const server = new SorobanRpc.Server('https://rpc-futurenet.stellar.org');
 
 export class SorobanContract {
   public contract: string;
@@ -13,10 +11,12 @@ export class SorobanContract {
   }
 
   async getDataKeyTTL(dataKey: xdr.ScVal[]) {
+    const { server } = await getConfig();
+
     const result = await server.getContractData(
       this.contract,
       scvVec(dataKey),
-      Durability.Persistent,
+      rpc.Durability.Persistent,
     );
 
     return {
@@ -27,10 +27,12 @@ export class SorobanContract {
   }
 
   async getContractTTL() {
+    const { server } = await getConfig();
+
     const result = await server.getContractData(
       this.contract,
       scvLedgerKeyContractInstance(),
-      Durability.Persistent,
+      rpc.Durability.Persistent,
     );
 
     return {

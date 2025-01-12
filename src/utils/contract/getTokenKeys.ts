@@ -1,4 +1,4 @@
-import { Address } from 'stellar-sdk';
+import { Address } from '@stellar/stellar-sdk';
 
 import getTokens from '../soroban/getTokens';
 import getConfig from '../soroban/getConfig';

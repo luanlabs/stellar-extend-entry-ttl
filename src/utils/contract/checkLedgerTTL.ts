@@ -1,4 +1,4 @@
-import { xdr } from 'stellar-sdk';
+import { xdr } from '@stellar/stellar-sdk';
 
 import BN from '../BN';
 import log from '../../logger';

@@ -1,9 +1,9 @@
 import log from '../logger';
 import getConfig from '../utils/soroban/getConfig';
 import checkContractTTL from '../utils/contract/checkContractTTL';
-import getLatestStreamId from '../utils/soroban/getLatestStreamId';
+import getLatestLockupId from '../utils/soroban/getLatestLockupId';
 import getTokenKeysToExtend from '../utils/contract/getTokenKeys';
-import getStreamKeysToExtend from '../utils/contract/getStreamKeys';
+import getLockupKeys from '../utils/contract/getLockupKeys';
 import handleExtendDataEntires from '../utils/soroban/contract/handleExtendDataEntries';
 import handleRestoreDataEntires from '../utils/soroban/contract/handleRestoreDataEntries';
 import { DAY_IN_SECONDS } from '../constants/ledgerTime';
@@ -13,16 +13,13 @@ const checkTTLData = async () => {
     const { server, contract } = await getConfig();
     const { sequence: lastLedger } = await server.getLatestLedger();
 
-    const latestStreamId = await getLatestStreamId();
+    const latestLockupId = await getLatestLockupId();
 
-    const { streamsToExtend, streamsToRestore } = await getStreamKeysToExtend(
-      latestStreamId,
-      lastLedger,
-    );
+    const { lockupsToExtend, lockupsToRestore } = await getLockupKeys(latestLockupId, lastLedger);
     const { tokensToExtend, tokensToRestore } = await getTokenKeysToExtend(lastLedger);
 
-    const keysToExtend = [...streamsToExtend, ...tokensToExtend];
-    const keysToRestore = [...streamsToRestore, ...tokensToRestore];
+    const keysToExtend = [...lockupsToExtend, ...tokensToExtend];
+    const keysToRestore = [...lockupsToRestore, ...tokensToRestore];
 
     const fluxityContractKey = await checkContractTTL(contract.address().toString(), lastLedger);
     if (fluxityContractKey) {

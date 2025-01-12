@@ -1,4 +1,4 @@
-import { Operation, xdr } from 'stellar-sdk';
+import { Operation, xdr } from '@stellar/stellar-sdk';
 
 import getConfig from '../getConfig';
 import baseTransaction from '../baseTransaction';

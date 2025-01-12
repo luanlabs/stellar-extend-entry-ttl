@@ -1,10 +1,7 @@
 import bunyan from 'bunyan';
-import dotenv from 'dotenv';
-import checkIfEnvsAreSet from './env';
+import envs from './envs';
 
-dotenv.config();
-
-checkIfEnvsAreSet();
+const { LOG_FILE_PATH, NODE_ENV } = envs();
 
 let level = bunyan.TRACE;
 let streams = [
@@ -14,16 +11,16 @@ let streams = [
   },
   {
     level: bunyan.WARN,
-    path: process.env.LOG_FILE_PATH,
+    path: LOG_FILE_PATH,
   },
 ];
 
-if (process.env.NODE_ENV == 'production') {
+if (NODE_ENV == 'production') {
   level = bunyan.WARN;
   streams = [
     {
       level: bunyan.WARN,
-      path: process.env.LOG_FILE_PATH,
+      path: LOG_FILE_PATH,
     },
   ];
 }

@@ -1,4 +1,4 @@
-import { xdr } from 'stellar-sdk';
+import { xdr } from '@stellar/stellar-sdk';
 
 import log from '../../../logger';
 import getConfig from '../getConfig';

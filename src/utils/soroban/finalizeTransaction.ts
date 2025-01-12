@@ -1,8 +1,8 @@
-import { SorobanRpc } from 'stellar-sdk';
+import { rpc } from '@stellar/stellar-sdk';
 
 import log from '../../logger';
 
-const finalizeTransaction = async (hash: string, server: SorobanRpc.Server) => {
+const finalizeTransaction = async (hash: string, server: rpc.Server) => {
   for (let index = 0; index < 20; index++) {
     const tx = await server.getTransaction(hash);
 
