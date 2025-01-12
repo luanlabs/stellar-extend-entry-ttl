@@ -1,4 +1,5 @@
 import { xdr, rpc } from '@stellar/stellar-sdk';
+
 import getConfig from '../soroban/getConfig';
 
 const { scvVec, scvLedgerKeyContractInstance } = xdr.ScVal;

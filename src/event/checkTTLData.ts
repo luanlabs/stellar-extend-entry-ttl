@@ -1,12 +1,12 @@
 import log from '../logger';
 import getConfig from '../utils/soroban/getConfig';
-import checkContractTTL from '../utils/contract/checkContractTTL';
-import getLatestLockupId from '../utils/soroban/getLatestLockupId';
-import getTokenKeysToExtend from '../utils/contract/getTokenKeys';
+import { DAY_IN_SECONDS } from '../constants/ledgerTime';
 import getLockupKeys from '../utils/contract/getLockupKeys';
+import checkContractTTL from '../utils/contract/checkContractTTL';
+import getTokenKeysToExtend from '../utils/contract/getTokenKeys';
+import getLatestLockupId from '../utils/soroban/getLatestLockupId';
 import handleExtendDataEntires from '../utils/soroban/contract/handleExtendDataEntries';
 import handleRestoreDataEntires from '../utils/soroban/contract/handleRestoreDataEntries';
-import { DAY_IN_SECONDS } from '../constants/ledgerTime';
 
 const checkTTLData = async () => {
   try {

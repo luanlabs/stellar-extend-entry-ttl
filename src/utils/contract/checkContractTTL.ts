@@ -1,5 +1,5 @@
-import { SorobanContract } from './SorobanContrcat';
 import checkLedgerTTL from './checkLedgerTTL';
+import { SorobanContract } from './SorobanContrcat';
 
 const checkContractTTL = async (contract: string, lastLedger: number) => {
   const selectContract = new SorobanContract(contract);

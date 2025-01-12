@@ -1,4 +1,4 @@
-import { xdr } from 'stellar-sdk';
+import { xdr } from '@stellar/stellar-sdk';
 
 import { KeyType } from '../../types/keyType';
 import getConfig from '../soroban/getConfig';
