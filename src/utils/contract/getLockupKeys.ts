@@ -1,4 +1,4 @@
-import { xdr } from 'stellar-sdk';
+import { xdr } from '@stellar/stellar-sdk';
 
 import { KeyType } from '../../types/keyType';
 import getConfig from '../soroban/getConfig';
@@ -7,35 +7,35 @@ import checkDataEntry from './checkDataEntry';
 const { Uint64, ScVal } = xdr;
 const { scvU64 } = ScVal;
 
-const getStreamKeys = async (lastId: bigint, lastLedger: number) => {
+const getLockupKeys = async (lastId: bigint, lastLedger: number) => {
   const { contract } = await getConfig();
 
-  const promiseStreams = [];
+  const promiseLockups = [];
 
   for (let i = 0; i < lastId; i++) {
     const ledgerKey = checkDataEntry(
       contract.address().toString(),
-      'Stream',
+      'Lockup',
       lastLedger,
       scvU64(Uint64.fromString(i.toString())),
     );
-    promiseStreams.push(ledgerKey);
+    promiseLockups.push(ledgerKey);
   }
 
-  const streams = await Promise.all(promiseStreams);
-  const streamsToExtend = streams
+  const lockups = await Promise.all(promiseLockups);
+  const lockupsToExtend = lockups
     .filter((value): value is KeyType => value !== null && value.type === 'extend')
     .map((value) => {
       return value.key;
     });
 
-  const streamsToRestore = streams
+  const lockupsToRestore = lockups
     .filter((value): value is KeyType => value !== null && value.type === 'restore')
     .map((value) => {
       return value.key;
     });
 
-  return { streamsToExtend, streamsToRestore };
+  return { lockupsToExtend, lockupsToRestore };
 };
 
-export default getStreamKeys;
+export default getLockupKeys;

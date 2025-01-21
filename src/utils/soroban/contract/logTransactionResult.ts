@@ -1,10 +1,9 @@
-import { xdr } from 'stellar-sdk';
-import { Api } from 'stellar-sdk/lib/soroban';
+import { xdr, rpc } from '@stellar/stellar-sdk';
 
 import log from '../../../logger';
 
 const logTransactionResult = (
-  finalize: false | Api.GetSuccessfulTransactionResponse,
+  finalize: false | rpc.Api.GetSuccessfulTransactionResponse,
   keysSplit: xdr.LedgerKey[],
 ) => {
   if (finalize) {

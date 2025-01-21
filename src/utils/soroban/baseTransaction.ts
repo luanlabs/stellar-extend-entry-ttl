@@ -5,7 +5,7 @@ import {
   TransactionBuilder,
   Operation,
   SorobanDataBuilder,
-} from 'stellar-sdk';
+} from '@stellar/stellar-sdk';
 
 import getConfig from './getConfig';
 import { TTransaction, Transactions } from '../../types/Transactions';
@@ -23,7 +23,7 @@ const baseTransaction = async (
 
   let transaction = await new TransactionBuilder(admin, {
     fee,
-    networkPassphrase: Networks.FUTURENET,
+    networkPassphrase: Networks.TESTNET,
   });
 
   if (keys) {

@@ -1,3 +1,4 @@
+import envs from '../../envs';
 import request from '../request';
 
 const getTokens = async () => {
@@ -6,7 +7,9 @@ const getTokens = async () => {
     headers: { 'Content-Type': 'application/json' },
   };
 
-  const tokens = await request(String(process.env.API_URL), config);
+  const { API_URL } = envs();
+
+  const tokens = await request(API_URL, config);
   const tokenClaimable = tokens.result.filter((token: { claimable: boolean }) => token.claimable);
 
   return tokenClaimable;

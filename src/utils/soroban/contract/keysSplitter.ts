@@ -1,4 +1,4 @@
-import { xdr } from 'stellar-sdk';
+import { xdr } from '@stellar/stellar-sdk';
 
 const keysSplitter = (keys: xdr.LedgerKey[], splitSize: number) => {
   const keysSplit = [];

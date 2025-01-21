@@ -1,9 +1,9 @@
 import envEnforcer from 'envil';
 
-const checkEnvs = () => {
+const envs = () => {
   const envs = [
     'ADMIN_SECRET_KEY',
-    'FUTURENET_RPC_URL',
+    'RPC_URL',
     'BASE_FEE',
     'CONTRACT_ID',
     'NODE_ENV',
@@ -11,7 +11,7 @@ const checkEnvs = () => {
     'API_URL',
   ];
 
-  envEnforcer(envs);
+  return envEnforcer(envs, { returnValues: true });
 };
 
-export default checkEnvs;
+export default envs;
