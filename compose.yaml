@@ -1,0 +1,11 @@
+services:
+  fluxity-extend:
+    env_file: .env
+    environment:
+      LOG_FILE_PATH: /app/storage/${LOG_FILENAME}
+    build: .
+    restart: unless-stopped
+    volumes:
+      - '${LOG_DIRNAME}:/app/storage'
+    networks:
+      - wagentapi
